@@ -51,7 +51,7 @@ int main(int argc,char** argv){
 
   //use G4SteppingVerboseWithUnits
   G4int precision = 4;
-  G4SteppingVerbose::UseBestUnit(precision);
+  // G4SteppingVerbose::UseBestUnit(precision);
 
   // Construct the default run manager
   auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
@@ -71,11 +71,11 @@ int main(int argc,char** argv){
   runManager->SetUserInitialization(new ActionInitialization());
 
   // Initialize visualization with the default graphics system
-  auto visManager = new G4VisExecutive(argc, argv);
+  G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  auto UImanager = G4UImanager::GetUIpointer();
+  G4UImanager*  UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
   //

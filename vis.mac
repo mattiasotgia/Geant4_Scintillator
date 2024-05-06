@@ -13,7 +13,7 @@
 /run/initialize
 
 # Specify a viewer, e.g., /vis/open OGL, or allow a system choice:
-/vis/open
+/vis/open OGLSQt
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
