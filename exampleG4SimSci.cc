@@ -49,9 +49,6 @@ int main(int argc,char** argv){
   G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
 
-  //use G4SteppingVerboseWithUnits
-  G4int precision = 4;
-  // G4SteppingVerbose::UseBestUnit(precision);
 
   // Construct the default run manager
   auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
@@ -59,8 +56,8 @@ int main(int argc,char** argv){
   // Set mandatory initialization classes
   
   // Detector construction
-  auto myDC = new DetectorConstruction();
-  runManager->SetUserInitialization(myDC);
+  auto Detector = new DetectorConstruction();
+  runManager->SetUserInitialization(Detector);
 
   // Physics list
   auto physicsList = new FTFP_BERT;
@@ -71,11 +68,11 @@ int main(int argc,char** argv){
   runManager->SetUserInitialization(new ActionInitialization());
 
   // Initialize visualization with the default graphics system
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  G4UImanager*  UImanager = G4UImanager::GetUIpointer();
+  auto  UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
   //

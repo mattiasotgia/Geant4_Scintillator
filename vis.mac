@@ -13,7 +13,7 @@
 /run/initialize
 
 # Specify a viewer, e.g., /vis/open OGL, or allow a system choice:
-/vis/open OGLSQt
+/vis/open OGL
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -53,14 +53,7 @@
 # Axes, scale, etc.
 /vis/scene/add/axes    # Simple axes: x=red, y=green, z=blue.
 /vis/scene/add/eventID # Drawn at end of event
-/vis/scene/add/logo2D  # logo
 #
-# Frame
-/vis/set/colour red
-/vis/set/lineWidth 2
-/vis/scene/add/frame   # Simple frame around the view
-/vis/set/colour        # Revert to default colour (white)
-/vis/set/lineWidth     # Revert to default line width (1.)
 #
 # To get nice view
 # Make the "World" box invisible
