@@ -31,6 +31,7 @@
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
 #include "G4Box.hh"
+#include "G4Tubs.hh"
 #include "G4Cons.hh"
 #include "G4Orb.hh"
 #include "G4Sphere.hh"
@@ -44,66 +45,73 @@
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  // Get nist material manager
-  G4NistManager* nist = G4NistManager::Instance();
+	// Get nist material manager
+	G4NistManager* nist = G4NistManager::Instance();
 
-  // Option to switch on/off checking of volumes overlaps
-  G4bool checkOverlaps = true;
+	// Option to switch on/off checking of volumes overlaps
+	G4bool checkOverlaps = true;
 
-  // World
+	// World
 
-  G4double sizeXY = 20*cm, sizeZ = 30*cm;
-  G4double world_sizeXY = 1.2*sizeXY;
-  G4double world_sizeZ  = 1.2*sizeZ;
-  G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
+	G4double sizeXY = 20*cm, sizeZ = 30*cm;
+	G4double world_sizeXY = 1.2*sizeXY;
+	G4double world_sizeZ  = 1.2*sizeZ;
+	G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
 
-  auto solidWorld = new G4Box("World",                           // its name
-    world_sizeXY, world_sizeXY, world_sizeZ);  // its size
+	auto solidWorld = new G4Box("World",                           // its name
+								world_sizeXY, world_sizeXY, world_sizeZ);  // its size
   
-  auto logicWorld = new G4LogicalVolume(solidWorld,  // its solid
-    world_mat,                                       // its material
-    "World");                                        // its name
+	auto logicWorld = new G4LogicalVolume(solidWorld,  // its solid
+										  world_mat,                                       // its material
+										  "World");                                        // its name
   
-  auto physWorld = new G4PVPlacement(nullptr,  // no rotation
-    G4ThreeVector(),                           // at (0,0,0)
-    logicWorld,                                // its logical volume
-    "World",                                   // its name
-    nullptr,                                   // its mother  volume
-    false,                                     // no boolean operation
-    0,                                         // copy number
-    checkOverlaps);                            // overlaps checking
+	auto physWorld = new G4PVPlacement(nullptr,  // no rotation
+									   G4ThreeVector(),                           // at (0,0,0)
+									   logicWorld,                                // its logical volume
+									   "World",                                   // its name
+									   nullptr,                                   // its mother  volume
+									   false,                                     // no boolean operation
+									   0,                                         // copy number
+									   checkOverlaps);                            // overlaps checking
   
-  //
-  // Counter
+	//
+	// Counter
 
-  G4Material* shape_mat = nist->FindOrBuildMaterial("G4_Cu");
-  G4double shape_sizeXY = 0.1 * world_sizeXY;
-  G4double shape_sizeZ  = 0.1 * world_sizeZ;
+	G4Material* shape_mat = nist->FindOrBuildMaterial("G4_SODIUM_IODIDE");
+
+	G4double innerRadius = 0.*cm;
+	G4double shape_sizeXY = 2.*cm;
+	G4double shape_sizeZ = 2.5*cm;
+	G4double startAngle = 0.*deg;
+	G4double spanningAngle = 360.*deg;
+
+	G4Tubs* solidShape = new G4Tubs("Counter",
+										innerRadius,
+										shape_sizeXY,
+										shape_sizeZ/2,
+										startAngle,
+										spanningAngle);
   
-  G4ThreeVector pos = G4ThreeVector(0, 0, shape_sizeZ/2);
+	G4ThreeVector pos = G4ThreeVector(0, 0, shape_sizeZ/2);
 
-  // Box
-  auto solidShape = new G4Box("Counter",       // its name
-    shape_sizeXY, shape_sizeXY, shape_sizeZ);  // its size
+	auto logicShape = new G4LogicalVolume(solidShape,  // its solid
+										  shape_mat,                                       // its material
+										  "Counter");                                      // its name
 
-  auto logicShape = new G4LogicalVolume(solidShape,  // its solid
-    shape_mat,                                       // its material
-    "Counter");                                      // its name
+	auto physShape  = new G4PVPlacement(nullptr,  // no rotation
+										pos,                                        // at position
+										logicShape,                                 // its logical volume
+										"Counter",                                  // its name
+										logicWorld,                                 // its mother  volume
+										false,                                      // no boolean operation
+										0,                                          // copy number
+										checkOverlaps);                             // overlaps checking
 
-  auto physShape  = new G4PVPlacement(nullptr,  // no rotation
-    pos,                                        // at position
-    logicShape,                                 // its logical volume
-    "Counter",                                  // its name
-    logicWorld,                                 // its mother  volume
-    false,                                      // no boolean operation
-    0,                                          // copy number
-    checkOverlaps);                             // overlaps checking
+	// Set Shape as scoring volume
+	fScoringVolume = logicShape;
 
-  // Set Shape as scoring volume
-  fScoringVolume = logicShape;
-
-  //always return the physical World
-  return physWorld;
+	//always return the physical World
+	return physWorld;
 
 }
 

@@ -41,7 +41,7 @@ class G4LogicalVolume;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
     DetectorConstruction() = default;
     ~DetectorConstruction() override = default;
 
@@ -49,7 +49,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
 
-  protected:
+protected:
     G4LogicalVolume* fScoringVolume = nullptr;
 };
 
