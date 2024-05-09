@@ -66,7 +66,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   	auto analysisManager = G4AnalysisManager::Instance();
 	analysisManager->OpenFile("scintillator_data_output.root");
 
-	analysisManager->CreateH1("E_true","Energy deposition", 100, 0., 1.*MeV);
+	analysisManager->CreateH1("hETrue","Energy deposition", 100, 0., 1.*MeV);
 
 }
 
